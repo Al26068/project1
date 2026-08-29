@@ -1,0 +1,13 @@
+.screen-placeholder {
+  background: var(--color-surface);
+  border: 2px dashed var(--color-border);
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  color: var(--color-text);
+}
+
+.screen-placeholder p {
+  margin-top: 8px;
+  font-size: 14px;
+}

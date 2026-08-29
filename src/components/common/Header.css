@@ -1,0 +1,39 @@
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--color-primary-soft);
+  padding: 12px 12px 12px 16px;
+  border-bottom: 2px solid var(--color-border);
+}
+
+.app-header__spacer {
+  width: 32px;
+}
+
+.app-header__title {
+  flex: 1;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-text-strong);
+}
+
+.app-header__settings {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: var(--color-text-strong);
+  text-decoration: none;
+}
+
+.app-header__settings-icon {
+  width: 20px;
+  height: 20px;
+}

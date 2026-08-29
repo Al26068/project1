@@ -1,0 +1,58 @@
+:root {
+  --color-bg: #fff8fb;
+  --color-surface: #ffffff;
+  --color-text: #5b4a55;
+  --color-text-strong: #3d2e3a;
+  --color-primary: #ff9eb5;
+  --color-primary-soft: #ffe1e9;
+  --color-secondary: #c9a7eb;
+  --color-secondary-soft: #ecdcff;
+  --color-accent-yellow: #ffe29a;
+  --color-accent-green: #b6e8c8;
+  --color-accent-blue: #aad4f5;
+  --color-border: #f3d9e4;
+  --shadow-soft: 0 4px 12px rgba(255, 158, 181, 0.25);
+
+  --font-sans: 'Hiragino Maru Gothic ProN', 'Rounded Mplus 1c', system-ui,
+    'Segoe UI', Roboto, sans-serif;
+
+  font: 16px/150% var(--font-sans);
+  color-scheme: light;
+  color: var(--color-text);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+#root {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100svh;
+  background: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-soft);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  color: var(--color-text-strong);
+  margin: 0 0 8px;
+}
+
+p {
+  margin: 0;
+}
