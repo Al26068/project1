@@ -1,0 +1,62 @@
+.clock-in-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.clock-in-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--color-text);
+}
+
+.clock-in-form__field input,
+.clock-in-form__field select {
+  font: inherit;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--color-border);
+  background: #fff;
+  color: var(--color-text-strong);
+}
+
+.clock-in-form__field input:focus,
+.clock-in-form__field select:focus {
+  outline: 2px solid var(--color-primary-soft);
+  border-color: var(--color-primary);
+}
+
+.clock-in-form__actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.clock-in-form__btn {
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: none;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.clock-in-form__btn--primary {
+  background: var(--color-primary);
+  color: #fff;
+  box-shadow: var(--shadow-soft);
+}
+
+.clock-in-form__btn--ghost {
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+.clock-in-form__empty {
+  font-size: 14px;
+  text-align: center;
+  padding: 12px;
+}

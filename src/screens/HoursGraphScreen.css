@@ -1,0 +1,14 @@
+.hours-graph-screen__description {
+  font-size: 13px;
+  color: var(--color-text);
+  margin-bottom: 16px;
+}
+
+.hours-graph-screen__empty {
+  background: var(--color-surface);
+  border: 2px dashed var(--color-border);
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  font-size: 14px;
+}

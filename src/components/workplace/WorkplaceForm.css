@@ -1,0 +1,190 @@
+.workplace-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.workplace-form__section {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.workplace-form__section h3 {
+  font-size: 14px;
+  color: var(--color-secondary);
+}
+
+.workplace-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--color-text);
+}
+
+.workplace-form__field input,
+.workplace-form__field select {
+  font: inherit;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--color-border);
+  background: #fff;
+  color: var(--color-text-strong);
+}
+
+.workplace-form__field input:focus,
+.workplace-form__field select:focus {
+  outline: 2px solid var(--color-primary-soft);
+  border-color: var(--color-primary);
+}
+
+.workplace-form__checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.workplace-form__color-list {
+  display: flex;
+  gap: 10px;
+}
+
+.workplace-form__color-swatch {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.workplace-form__color-swatch--active {
+  border-color: var(--color-text-strong);
+}
+
+.workplace-form__wage-type {
+  display: flex;
+  gap: 8px;
+}
+
+.workplace-form__wage-type-btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--color-border);
+  background: #fff;
+  color: var(--color-text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.workplace-form__wage-type-btn--active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+  font-weight: 700;
+}
+
+.workplace-form__day-toggle-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.workplace-form__day-toggle {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: #fff;
+  color: var(--color-text);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.workplace-form__day-toggle--active {
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
+  color: #fff;
+  font-weight: 700;
+}
+
+.workplace-form__custom-date-input {
+  display: flex;
+  gap: 8px;
+}
+
+.workplace-form__custom-date-input input {
+  flex: 1;
+}
+
+.workplace-form__custom-date-list {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.workplace-form__custom-date-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 13px;
+}
+
+.workplace-form__custom-date-list button {
+  border: none;
+  background: none;
+  color: var(--color-text);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.workplace-form__night-shift {
+  margin-top: 8px;
+  padding: 12px;
+  background: var(--color-primary-soft);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.workplace-form__actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.workplace-form__btn {
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: none;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.workplace-form__btn--primary {
+  background: var(--color-primary);
+  color: #fff;
+  box-shadow: var(--shadow-soft);
+}
+
+.workplace-form__btn--ghost {
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}

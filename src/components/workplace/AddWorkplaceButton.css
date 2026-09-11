@@ -1,0 +1,18 @@
+.add-workplace-button {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-soft);
+}
+
+.add-workplace-button__icon {
+  width: 20px;
+  height: 20px;
+}
