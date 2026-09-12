@@ -1,15 +1,9 @@
 import { NavLink } from 'react-router-dom'
-import {
-  BuildingIcon,
-  ChartIcon,
-  ClockIcon,
-  PiggyBankIcon,
-  SparkleIcon,
-} from './icons'
+import { BuildingIcon, ChartIcon, ClockIcon, HomeIcon, SparkleIcon } from './icons'
 import './TabBar.css'
 
 const TABS = [
-  { to: '/savings', label: '貯金', Icon: PiggyBankIcon },
+  { to: '/', label: 'ホーム', Icon: HomeIcon },
   { to: '/workplace', label: '職場管理', Icon: BuildingIcon },
   { to: '/clock-in', label: '打刻', Icon: ClockIcon, center: true },
   { to: '/shift', label: 'シフト生成', Icon: SparkleIcon },
@@ -23,6 +17,7 @@ function TabBar() {
         <NavLink
           key={to}
           to={to}
+          end={to === '/'}
           className={({ isActive }) =>
             [
               'tab-bar__item',

@@ -1,7 +1,7 @@
 import type { ClockRecord } from '../types/clockRecord'
 import type { Workplace } from '../types/workplace'
 
-function parseTimeToMinutes(time: string): number {
+export function parseTimeToMinutes(time: string): number {
   const [h, m] = time.split(':').map(Number)
   return h * 60 + m
 }

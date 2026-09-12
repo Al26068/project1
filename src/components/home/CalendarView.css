@@ -1,0 +1,107 @@
+.calendar-view {
+  background: var(--color-surface);
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid var(--color-border);
+}
+
+.calendar-view__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.calendar-view__header h3 {
+  margin: 0;
+}
+
+.calendar-view__header button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  background: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  color: var(--color-text);
+}
+
+.calendar-view__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-size: 12px;
+  color: var(--color-text);
+  margin-bottom: 4px;
+}
+
+.calendar-view__weekday--sunday {
+  color: var(--color-sunday);
+}
+
+.calendar-view__weekday--saturday {
+  color: var(--color-saturday);
+}
+
+.calendar-view__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.calendar-view__empty {
+  font-size: 14px;
+  text-align: center;
+  padding: 12px;
+}
+
+.calendar-view__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.calendar-view__field select,
+.calendar-view__field input {
+  font: inherit;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--color-border);
+  background: #fff;
+  color: var(--color-text-strong);
+}
+
+.calendar-view__schedule-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.calendar-view__actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.calendar-view__btn {
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: none;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.calendar-view__btn--primary {
+  background: var(--color-primary);
+  color: #fff;
+  box-shadow: var(--shadow-soft);
+}
+
+.calendar-view__btn--ghost {
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}

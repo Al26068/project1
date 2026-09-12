@@ -3,6 +3,7 @@ import Modal from '../components/common/Modal'
 import AddWorkplaceButton from '../components/workplace/AddWorkplaceButton'
 import WorkplaceCard from '../components/workplace/WorkplaceCard'
 import WorkplaceForm from '../components/workplace/WorkplaceForm'
+import { loadClockRecords } from '../lib/clockRecordStorage'
 import { createWorkplaceId, loadWorkplaces, saveWorkplaces } from '../lib/workplaceStorage'
 import type { Workplace } from '../types/workplace'
 import './WorkplaceScreen.css'
@@ -11,6 +12,7 @@ type Tab = 'current' | 'history'
 
 function WorkplaceScreen() {
   const [workplaces, setWorkplaces] = useState<Workplace[]>(() => loadWorkplaces())
+  const [records] = useState(() => loadClockRecords())
   const [isModalOpen, setModalOpen] = useState(false)
   const [tab, setTab] = useState<Tab>('current')
   const [retireTargetId, setRetireTargetId] = useState<string | null>(null)
@@ -82,12 +84,14 @@ function WorkplaceScreen() {
               <WorkplaceCard
                 key={workplace.id}
                 workplace={workplace}
+                records={records}
                 onRetire={() => setRetireTargetId(workplace.id)}
               />
             ) : (
               <WorkplaceCard
                 key={workplace.id}
                 workplace={workplace}
+                records={records}
                 onRestore={() => updateWorkplace(workplace.id, { status: 'active' })}
               />
             ),

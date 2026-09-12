@@ -1,0 +1,56 @@
+.calendar-day-cell {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border: none;
+  background: transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  font: inherit;
+  color: var(--color-text-strong);
+}
+
+.calendar-day-cell--empty {
+  cursor: default;
+}
+
+.calendar-day-cell:hover:not(.calendar-day-cell--empty) {
+  background: var(--color-primary-soft);
+}
+
+.calendar-day-cell--today .calendar-day-cell__number {
+  background: var(--color-primary);
+  color: #fff;
+  border-radius: 50%;
+}
+
+.calendar-day-cell__number {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+}
+
+.calendar-day-cell__number--red {
+  color: var(--color-sunday);
+}
+
+.calendar-day-cell__number--blue {
+  color: var(--color-saturday);
+}
+
+.calendar-day-cell__stars {
+  display: flex;
+  gap: 2px;
+  height: 14px;
+}
+
+.calendar-day-cell__star {
+  width: 14px;
+  height: 14px;
+}

@@ -49,6 +49,22 @@
   box-shadow: var(--shadow-soft);
 }
 
+.clock-in-form__btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.clock-in-form__error {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--color-primary-soft);
+  color: var(--color-sunday);
+  font-size: 13px;
+  font-weight: 700;
+}
+
 .clock-in-form__btn--ghost {
   background: transparent;
   color: var(--color-text);
