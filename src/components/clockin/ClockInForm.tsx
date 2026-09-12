@@ -1,8 +1,11 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { parseTimeToMinutes } from '../../lib/hoursSummary'
+import { loadSchedulePlans } from '../../lib/schedulePlanStorage'
 import { loadWorkplaces } from '../../lib/workplaceStorage'
 import type { ClockRecord } from '../../types/clockRecord'
+import type { SchedulePlan } from '../../types/schedulePlan'
+import type { Workplace } from '../../types/workplace'
 import './ClockInForm.css'
 
 type ClockInInput = Omit<ClockRecord, 'id'>
@@ -12,6 +15,32 @@ function todayDateKey(): string {
   const mm = String(now.getMonth() + 1).padStart(2, '0')
   const dd = String(now.getDate()).padStart(2, '0')
   return `${now.getFullYear()}-${mm}-${dd}`
+}
+
+// 今日の予定のうち、始業時刻が「今」から前後1時間以内のものを探す（一番近いものを優先）
+function findMatchingSchedulePlan(
+  plans: SchedulePlan[],
+  workplaces: Workplace[],
+): SchedulePlan | undefined {
+  const today = todayDateKey()
+  const now = new Date()
+  const nowMinutes = now.getHours() * 60 + now.getMinutes()
+  const activeWorkplaceIds = new Set(workplaces.map((w) => w.id))
+
+  let best: SchedulePlan | undefined
+  let bestDiff = Infinity
+
+  for (const plan of plans) {
+    if (plan.date !== today || !activeWorkplaceIds.has(plan.workplaceId)) continue
+    if (!plan.startTime || !plan.endTime) continue // 時刻を持たない古い形式の予定データは対象外にする
+    const diff = Math.abs(nowMinutes - parseTimeToMinutes(plan.startTime))
+    if (diff <= 60 && diff < bestDiff) {
+      best = plan
+      bestDiff = diff
+    }
+  }
+
+  return best
 }
 
 // 日付を diffDays 日ぶんずらした日付キーを返す
@@ -42,10 +71,11 @@ interface ClockInFormProps {
 
 function ClockInForm({ onSubmit, onCancel }: ClockInFormProps) {
   const [workplaces] = useState(() => loadWorkplaces().filter((w) => w.status === 'active'))
-  const [workplaceId, setWorkplaceId] = useState(workplaces[0]?.id ?? '')
+  const [matchedPlan] = useState(() => findMatchingSchedulePlan(loadSchedulePlans(), workplaces))
+  const [workplaceId, setWorkplaceId] = useState(matchedPlan?.workplaceId ?? workplaces[0]?.id ?? '')
   const [date, setDate] = useState(() => todayDateKey())
-  const [startTime, setStartTime] = useState('')
-  const [endTime, setEndTime] = useState('')
+  const [startTime, setStartTime] = useState(matchedPlan?.startTime ?? '')
+  const [endTime, setEndTime] = useState(matchedPlan?.endTime ?? '')
 
   // 終業時間が始業時間以前（＝日をまたぐ夜勤）になったら、まだ手動で日付を変えていない場合に限り
   // 自動で1日前にずらす（退勤後に「今日」入力すると、実際は前日の夜勤だったというケースに対応）。
@@ -90,6 +120,10 @@ function ClockInForm({ onSubmit, onCancel }: ClockInFormProps) {
 
   return (
     <form className="clock-in-form" onSubmit={handleSubmit}>
+      {matchedPlan && (
+        <p className="clock-in-form__hint">今日の予定から自動入力しました</p>
+      )}
+
       <label className="clock-in-form__field">
         <span>職場</span>
         <select value={workplaceId} onChange={(e) => setWorkplaceId(e.target.value)}>

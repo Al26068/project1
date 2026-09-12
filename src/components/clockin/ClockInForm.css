@@ -55,6 +55,16 @@
   box-shadow: none;
 }
 
+.clock-in-form__hint {
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: var(--color-secondary-soft);
+  color: var(--color-secondary);
+  font-size: 12px;
+  font-weight: 700;
+}
+
 .clock-in-form__error {
   margin: 0;
   padding: 10px 12px;

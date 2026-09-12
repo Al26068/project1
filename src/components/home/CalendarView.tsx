@@ -41,6 +41,7 @@ function CalendarView() {
   const [plans, setPlans] = useState<SchedulePlan[]>(() => loadSchedulePlans())
   const [workplaces] = useState(() => loadWorkplaces().filter((w) => w.status === 'active'))
   const [selectedDateKey, setSelectedDateKey] = useState<string | null>(null)
+  const [editingPlanId, setEditingPlanId] = useState<string | null>(null)
   const [formWorkplaceId, setFormWorkplaceId] = useState('')
   const [formStartTime, setFormStartTime] = useState('')
   const [formEndTime, setFormEndTime] = useState('')
@@ -78,11 +79,15 @@ function CalendarView() {
     }
   }
 
+  function resetForm() {
+    setEditingPlanId(null)
+    setFormWorkplaceId(workplaces[0]?.id ?? '')
+    setFormStartTime('')
+    setFormEndTime('')
+  }
+
   function openDayModal(dateKey: string) {
-    const existing = plansByDate.get(dateKey)?.[0]
-    setFormWorkplaceId(existing?.workplaceId ?? workplaces[0]?.id ?? '')
-    setFormStartTime(existing?.startTime ?? '')
-    setFormEndTime(existing?.endTime ?? '')
+    resetForm()
     setSelectedDateKey(dateKey)
   }
 
@@ -90,36 +95,51 @@ function CalendarView() {
     setSelectedDateKey(null)
   }
 
-  function handleSavePlan(event: FormEvent<HTMLFormElement>) {
+  function startEditingPlan(plan: SchedulePlan) {
+    setEditingPlanId(plan.id)
+    setFormWorkplaceId(plan.workplaceId)
+    setFormStartTime(plan.startTime ?? '')
+    setFormEndTime(plan.endTime ?? '')
+  }
+
+  // 編集中なら該当の予定を上書き、そうでなければ既存の予定を消さずに新規追加する
+  // （同じ日に複数の職場・シフトを登録できるようにするため）
+  function handleSubmitPlan(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    if (!selectedDateKey || !formWorkplaceId) return
-    const remaining = plans.filter((p) => p.date !== selectedDateKey)
-    const next = [
-      ...remaining,
-      {
-        id: createSchedulePlanId(),
-        workplaceId: formWorkplaceId,
-        date: selectedDateKey,
-        startTime: formStartTime,
-        endTime: formEndTime,
-      },
-    ]
+    if (!selectedDateKey || !formWorkplaceId || !formStartTime || !formEndTime) return
+
+    const next = editingPlanId
+      ? plans.map((p) =>
+          p.id === editingPlanId
+            ? { ...p, workplaceId: formWorkplaceId, startTime: formStartTime, endTime: formEndTime }
+            : p,
+        )
+      : [
+          ...plans,
+          {
+            id: createSchedulePlanId(),
+            workplaceId: formWorkplaceId,
+            date: selectedDateKey,
+            startTime: formStartTime,
+            endTime: formEndTime,
+          },
+        ]
+
     setPlans(next)
     saveSchedulePlans(next)
-    closeDayModal()
+    resetForm()
   }
 
-  function handleDeletePlan() {
-    if (!selectedDateKey) return
-    const next = plans.filter((p) => p.date !== selectedDateKey)
+  function handleDeletePlan(planId: string) {
+    const next = plans.filter((p) => p.id !== planId)
     setPlans(next)
     saveSchedulePlans(next)
-    closeDayModal()
+    if (editingPlanId === planId) {
+      resetForm()
+    }
   }
 
-  const hasExistingPlan = selectedDateKey
-    ? (plansByDate.get(selectedDateKey)?.length ?? 0) > 0
-    : false
+  const selectedDatePlans = selectedDateKey ? (plansByDate.get(selectedDateKey) ?? []) : []
 
   return (
     <div className="calendar-view">
@@ -187,57 +207,93 @@ function CalendarView() {
         {workplaces.length === 0 ? (
           <p className="calendar-view__empty">先に「職場管理」から職場を登録してください。</p>
         ) : (
-          <form className="calendar-view__schedule-form" onSubmit={handleSavePlan}>
-            <label className="calendar-view__field">
-              <span>職場</span>
-              <select
-                required
-                value={formWorkplaceId}
-                onChange={(e) => setFormWorkplaceId(e.target.value)}
-              >
-                {workplaces.map((workplace) => (
-                  <option key={workplace.id} value={workplace.id}>
-                    {workplace.name}
-                  </option>
-                ))}
-              </select>
-            </label>
+          <div className="calendar-view__schedule-form">
+            {selectedDatePlans.length > 0 && (
+              <ul className="calendar-view__plan-list">
+                {selectedDatePlans.map((plan) => {
+                  const workplace = workplaceMap.get(plan.workplaceId)
+                  return (
+                    <li key={plan.id} className="calendar-view__plan-item">
+                      <span
+                        className="calendar-view__plan-dot"
+                        style={{ background: workplace?.color ?? 'var(--color-border)' }}
+                      />
+                      <span className="calendar-view__plan-info">
+                        {workplace?.name ?? '（削除された職場）'} {plan.startTime}〜{plan.endTime}
+                      </span>
+                      <button
+                        type="button"
+                        className="calendar-view__plan-edit"
+                        onClick={() => startEditingPlan(plan)}
+                      >
+                        編集
+                      </button>
+                      <button
+                        type="button"
+                        className="calendar-view__plan-remove"
+                        aria-label="この予定を削除"
+                        onClick={() => handleDeletePlan(plan.id)}
+                      >
+                        ×
+                      </button>
+                    </li>
+                  )
+                })}
+              </ul>
+            )}
 
-            <label className="calendar-view__field">
-              <span>始業時間</span>
-              <input
-                type="time"
-                required
-                value={formStartTime}
-                onChange={(e) => setFormStartTime(e.target.value)}
-              />
-            </label>
-
-            <label className="calendar-view__field">
-              <span>終業時間</span>
-              <input
-                type="time"
-                required
-                value={formEndTime}
-                onChange={(e) => setFormEndTime(e.target.value)}
-              />
-            </label>
-
-            <div className="calendar-view__actions">
-              {hasExistingPlan && (
-                <button
-                  type="button"
-                  className="calendar-view__btn calendar-view__btn--ghost"
-                  onClick={handleDeletePlan}
+            <form className="calendar-view__add-form" onSubmit={handleSubmitPlan}>
+              <label className="calendar-view__field">
+                <span>職場</span>
+                <select
+                  required
+                  value={formWorkplaceId}
+                  onChange={(e) => setFormWorkplaceId(e.target.value)}
                 >
-                  予定を削除
+                  {workplaces.map((workplace) => (
+                    <option key={workplace.id} value={workplace.id}>
+                      {workplace.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <label className="calendar-view__field">
+                <span>始業時間</span>
+                <input
+                  type="time"
+                  required
+                  value={formStartTime}
+                  onChange={(e) => setFormStartTime(e.target.value)}
+                />
+              </label>
+
+              <label className="calendar-view__field">
+                <span>終業時間</span>
+                <input
+                  type="time"
+                  required
+                  value={formEndTime}
+                  onChange={(e) => setFormEndTime(e.target.value)}
+                />
+              </label>
+
+              <div className="calendar-view__actions">
+                {editingPlanId && (
+                  <button
+                    type="button"
+                    className="calendar-view__btn calendar-view__btn--ghost"
+                    onClick={resetForm}
+                  >
+                    編集をやめる
+                  </button>
+                )}
+                <button type="submit" className="calendar-view__btn calendar-view__btn--primary">
+                  {editingPlanId ? '更新する' : 'この予定を追加する'}
                 </button>
-              )}
-              <button type="submit" className="calendar-view__btn calendar-view__btn--primary">
-                保存する
-              </button>
-            </div>
-          </form>
+              </div>
+            </form>
+          </div>
         )}
       </Modal>
     </div>
