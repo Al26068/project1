@@ -1,6 +1,8 @@
 :root {
   --color-bg: #05070c;
-  --color-surface: rgba(255, 255, 255, 0.055);
+
+  /* ガラス面：色そのものはほぼ乗せず、backdrop-filterで背景の色を透過させる薄いレイヤー */
+  --color-surface: rgba(255, 255, 255, 0.045);
   --color-surface-strong: rgba(255, 255, 255, 0.075);
   --color-text: rgba(255, 255, 255, 0.62);
   --color-text-strong: rgba(255, 255, 255, 0.95);
@@ -19,12 +21,28 @@
   --color-sunday: #ff7a90;
   --color-saturday: #64b8ff;
 
-  --color-border: rgba(255, 255, 255, 0.09);
-  --color-border-light: rgba(255, 255, 255, 0.13);
-  --shadow-soft: 0 20px 50px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.035);
-  --shadow-button: 0 1px 1px rgba(0, 0, 0, 0.2), 0 6px 16px rgba(0, 0, 0, 0.3);
-  --shadow-glow: 0 6px 18px rgba(10, 132, 255, 0.22);
-  --glass-blur: blur(20px) saturate(120%);
+  /* 境界：下・左右は控えめに、上だけ --glass-edge-top で明るくして光が縁に当たっているように見せる */
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-light: rgba(255, 255, 255, 0.14);
+  --glass-edge-top: rgba(255, 255, 255, 0.32);
+
+  /* ヘッダー・メニュー・モーダルなど、内容の上に浮くガラス面のベース色（カード面より少し濃いめ） */
+  --glass-chrome-bg: rgba(9, 11, 17, 0.68);
+
+  /* 影：外側の環境光的な影＋内部ハイライト（上）＋内部シャドウ（下）を薄く重ねる */
+  --shadow-soft:
+    0 24px 56px rgba(0, 0, 0, 0.42),
+    0 1px 1px rgba(255, 255, 255, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.16);
+  --shadow-button:
+    0 1px 1px rgba(0, 0, 0, 0.22),
+    0 10px 24px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  --shadow-glow: 0 8px 22px rgba(10, 132, 255, 0.24);
+
+  /* backdrop-filter：blur＋彩度アップで背景の色をガラスに取り込む（ガラス自体には色を乗せない） */
+  --glass-blur: blur(24px) saturate(180%) brightness(1.05);
 
   --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text',
     'Hiragino Maru Gothic ProN', 'Segoe UI', 'Noto Sans JP', sans-serif;
@@ -85,4 +103,13 @@ p {
 ::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.12);
   border-radius: 999px;
+}
+
+select {
+  color-scheme: dark;
+}
+
+select option {
+  background: #14161d;
+  color: var(--color-text-strong);
 }

@@ -39,11 +39,12 @@ function formatPeriodLabel(period: PayPeriod) {
 interface WorkplaceCardProps {
   workplace: Workplace
   records: ClockRecord[]
+  onEdit?: () => void
   onRetire?: () => void
   onRestore?: () => void
 }
 
-function WorkplaceCard({ workplace, records, onRetire, onRestore }: WorkplaceCardProps) {
+function WorkplaceCard({ workplace, records, onEdit, onRetire, onRestore }: WorkplaceCardProps) {
   const isRetired = workplace.status === 'retired'
   const rate = getWageRate(workplace)
   const wage = calculatePeriodWage(workplace, records, todayDateKey())
@@ -76,16 +77,23 @@ function WorkplaceCard({ workplace, records, onRetire, onRestore }: WorkplaceCar
           この期間の給与：{formatYen(wage.totalWage)}
           {premiumNotes.length > 0 ? `（${premiumNotes.join('・')}を含む）` : ''}
         </p>
-        {onRetire && (
-          <button type="button" className="workplace-card__action" onClick={onRetire}>
-            退職済みにする
-          </button>
-        )}
-        {onRestore && (
-          <button type="button" className="workplace-card__action" onClick={onRestore}>
-            現在の職場に戻す
-          </button>
-        )}
+        <div className="workplace-card__actions">
+          {onEdit && (
+            <button type="button" className="workplace-card__action" onClick={onEdit}>
+              編集する
+            </button>
+          )}
+          {onRetire && (
+            <button type="button" className="workplace-card__action" onClick={onRetire}>
+              退職済みにする
+            </button>
+          )}
+          {onRestore && (
+            <button type="button" className="workplace-card__action" onClick={onRestore}>
+              現在の職場に戻す
+            </button>
+          )}
+        </div>
       </div>
     </article>
   )

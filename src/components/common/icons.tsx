@@ -109,3 +109,21 @@ export function CloseIcon(props: SVGProps<SVGSVGElement>) {
     </BaseIcon>
   )
 }
+
+export function ChevronLeftIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <BaseIcon {...props}>
+      <path d="M15 5l-7 7 7 7" />
+    </BaseIcon>
+  )
+}
+
+export function ImageIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <BaseIcon {...props}>
+      <rect x="3.5" y="4.5" width="17" height="15" rx="2" />
+      <circle cx="9" cy="10" r="1.5" />
+      <path d="M20 15l-4.5-4.5a1.5 1.5 0 0 0-2.1 0L7 17" />
+    </BaseIcon>
+  )
+}

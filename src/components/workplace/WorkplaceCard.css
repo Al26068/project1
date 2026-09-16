@@ -5,6 +5,7 @@
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--color-border);
+  border-top-color: var(--glass-edge-top);
   border-radius: 20px;
   padding: 14px;
   box-shadow: var(--shadow-soft);
@@ -52,9 +53,14 @@
   vertical-align: middle;
 }
 
-.workplace-card__action {
-  align-self: flex-start;
+.workplace-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
   margin-top: 6px;
+}
+
+.workplace-card__action {
   padding: 6px 12px;
   border-radius: 999px;
   border: 1px solid var(--color-border);

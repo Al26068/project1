@@ -16,10 +16,12 @@ function WorkplaceScreen() {
   const [isModalOpen, setModalOpen] = useState(false)
   const [tab, setTab] = useState<Tab>('current')
   const [retireTargetId, setRetireTargetId] = useState<string | null>(null)
+  const [editTargetId, setEditTargetId] = useState<string | null>(null)
 
   const currentWorkplaces = workplaces.filter((w) => w.status !== 'retired')
   const retiredWorkplaces = workplaces.filter((w) => w.status === 'retired')
   const retireTarget = workplaces.find((w) => w.id === retireTargetId) ?? null
+  const editTarget = workplaces.find((w) => w.id === editTargetId) ?? null
 
   function updateWorkplace(id: string, changes: Partial<Workplace>) {
     const next = workplaces.map((w) => (w.id === id ? { ...w, ...changes } : w))
@@ -39,6 +41,12 @@ function WorkplaceScreen() {
     if (!retireTargetId) return
     updateWorkplace(retireTargetId, { status: 'retired' })
     setRetireTargetId(null)
+  }
+
+  function handleEditSubmit(value: Omit<Workplace, 'id'>) {
+    if (!editTargetId) return
+    updateWorkplace(editTargetId, value)
+    setEditTargetId(null)
   }
 
   const listToShow = tab === 'current' ? currentWorkplaces : retiredWorkplaces
@@ -85,6 +93,7 @@ function WorkplaceScreen() {
                 key={workplace.id}
                 workplace={workplace}
                 records={records}
+                onEdit={() => setEditTargetId(workplace.id)}
                 onRetire={() => setRetireTargetId(workplace.id)}
               />
             ) : (
@@ -92,6 +101,7 @@ function WorkplaceScreen() {
                 key={workplace.id}
                 workplace={workplace}
                 records={records}
+                onEdit={() => setEditTargetId(workplace.id)}
                 onRestore={() => updateWorkplace(workplace.id, { status: 'active' })}
               />
             ),
@@ -101,6 +111,17 @@ function WorkplaceScreen() {
 
       <Modal open={isModalOpen} onClose={() => setModalOpen(false)} title="職場を追加">
         <WorkplaceForm onSubmit={handleAdd} onCancel={() => setModalOpen(false)} />
+      </Modal>
+
+      <Modal open={editTarget !== null} onClose={() => setEditTargetId(null)} title="職場情報を編集">
+        {editTarget && (
+          <WorkplaceForm
+            initialValue={editTarget}
+            submitLabel="更新する"
+            onSubmit={handleEditSubmit}
+            onCancel={() => setEditTargetId(null)}
+          />
+        )}
       </Modal>
 
       <Modal

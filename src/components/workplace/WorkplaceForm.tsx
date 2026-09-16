@@ -29,14 +29,16 @@ const DEFAULT_NIGHT_SHIFT: NightShiftPremium = {
   enabled: false,
   startTime: '22:00',
   endTime: '05:00',
-  extraWage: 200,
+  mode: 'fixed',
+  extraWage: undefined,
+  multiplier: undefined,
 }
 
 const DEFAULT_HOLIDAY_PREMIUM: HolidayPremium = {
   enabled: false,
   targetDays: [],
   customDates: [],
-  extraWage: 200,
+  extraWage: undefined,
 }
 
 const HOLIDAY_TARGET_OPTIONS: { value: HolidayTargetDay; label: string }[] = [
@@ -70,12 +72,14 @@ function formatDayLabel(day: number) {
 }
 
 interface WorkplaceFormProps {
+  initialValue?: WorkplaceInput
+  submitLabel?: string
   onSubmit: (value: WorkplaceInput) => void
   onCancel?: () => void
 }
 
-function WorkplaceForm({ onSubmit, onCancel }: WorkplaceFormProps) {
-  const [value, setValue] = useState<WorkplaceInput>(DEFAULT_VALUE)
+function WorkplaceForm({ initialValue, submitLabel = '保存する', onSubmit, onCancel }: WorkplaceFormProps) {
+  const [value, setValue] = useState<WorkplaceInput>(initialValue ?? DEFAULT_VALUE)
   const [customDateDraft, setCustomDateDraft] = useState('')
 
   const nightShift = value.nightShiftPremium ?? DEFAULT_NIGHT_SHIFT
@@ -252,24 +256,79 @@ function WorkplaceForm({ onSubmit, onCancel }: WorkplaceFormProps) {
                       }
                     />
                   </label>
-                  <label className="workplace-form__field">
-                    <span>追加される時給（円）</span>
-                    <input
-                      type="number"
-                      step={10}
-                      min={0}
-                      value={nightShift.extraWage}
-                      onChange={(e) =>
-                        setValue((prev) => ({
-                          ...prev,
-                          nightShiftPremium: {
-                            ...nightShift,
-                            extraWage: Number(e.target.value),
-                          },
-                        }))
-                      }
-                    />
-                  </label>
+                  <div className="workplace-form__field">
+                    <span>計算方式</span>
+                    <div className="workplace-form__wage-type">
+                      {(
+                        [
+                          { mode: 'fixed', label: '固定額を追加' },
+                          { mode: 'multiplier', label: '倍率で計算' },
+                        ] as const
+                      ).map(({ mode, label }) => (
+                        <button
+                          key={mode}
+                          type="button"
+                          className={
+                            'workplace-form__wage-type-btn' +
+                            ((nightShift.mode ?? 'fixed') === mode
+                              ? ' workplace-form__wage-type-btn--active'
+                              : '')
+                          }
+                          onClick={() =>
+                            setValue((prev) => ({
+                              ...prev,
+                              nightShiftPremium: { ...nightShift, mode },
+                            }))
+                          }
+                        >
+                          {label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {(nightShift.mode ?? 'fixed') === 'fixed' ? (
+                    <label className="workplace-form__field">
+                      <span>追加される時給（円）</span>
+                      <input
+                        type="number"
+                        step={1}
+                        min={0}
+                        value={nightShift.extraWage ?? ''}
+                        onChange={(e) =>
+                          setValue((prev) => ({
+                            ...prev,
+                            nightShiftPremium: {
+                              ...nightShift,
+                              extraWage: e.target.value === '' ? undefined : Number(e.target.value),
+                            },
+                          }))
+                        }
+                      />
+                    </label>
+                  ) : (
+                    <label className="workplace-form__field">
+                      <span>倍率（例：1.25 → 時給の1.25倍）</span>
+                      <input
+                        type="number"
+                        step={0.01}
+                        min={1}
+                        value={nightShift.multiplier ?? ''}
+                        onChange={(e) =>
+                          setValue((prev) => ({
+                            ...prev,
+                            nightShiftPremium: {
+                              ...nightShift,
+                              multiplier: e.target.value === '' ? undefined : Number(e.target.value),
+                            },
+                          }))
+                        }
+                      />
+                      <span className="workplace-form__hint">
+                        休日加給の対象日と重なる場合は、休日加給を含めた時給に倍率をかけて計算します
+                      </span>
+                    </label>
+                  )}
                 </div>
               )}
             </div>
@@ -346,15 +405,15 @@ function WorkplaceForm({ onSubmit, onCancel }: WorkplaceFormProps) {
                     <span>追加される時給（円）</span>
                     <input
                       type="number"
-                      step={10}
+                      step={1}
                       min={0}
-                      value={holidayPremium.extraWage}
+                      value={holidayPremium.extraWage ?? ''}
                       onChange={(e) =>
                         setValue((prev) => ({
                           ...prev,
                           holidayPremium: {
                             ...holidayPremium,
-                            extraWage: Number(e.target.value),
+                            extraWage: e.target.value === '' ? undefined : Number(e.target.value),
                           },
                         }))
                       }
@@ -487,7 +546,7 @@ function WorkplaceForm({ onSubmit, onCancel }: WorkplaceFormProps) {
           </button>
         )}
         <button type="submit" className="workplace-form__btn workplace-form__btn--primary">
-          保存する
+          {submitLabel}
         </button>
       </div>
     </form>

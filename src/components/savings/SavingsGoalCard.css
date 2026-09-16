@@ -1,0 +1,75 @@
+.savings-goal-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+  padding: 14px;
+  border-radius: 20px;
+  border: 1px solid var(--color-border);
+  border-top-color: var(--glass-edge-top);
+  background: var(--color-surface);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--shadow-soft);
+  font: inherit;
+  color: var(--color-text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.savings-goal-card__battery {
+  position: relative;
+  width: 100%;
+  height: 34px;
+  flex-shrink: 0;
+}
+
+.savings-goal-card__battery-body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  border: 1px solid var(--color-border-light);
+  background: var(--color-surface-strong);
+  overflow: hidden;
+}
+
+.savings-goal-card__battery-fill {
+  position: absolute;
+  inset: 2px auto 2px 2px;
+  border-radius: 8px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  transition: width 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.savings-goal-card__battery-nub {
+  position: absolute;
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 5px;
+  height: 12px;
+  border-radius: 0 3px 3px 0;
+  background: var(--color-border-light);
+}
+
+.savings-goal-card__name {
+  margin: 0;
+  font-weight: 600;
+  color: var(--color-text-strong);
+  font-size: 13px;
+}
+
+.savings-goal-card__percent {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.savings-goal-card__amount {
+  margin: 0;
+  font-size: 11px;
+  color: var(--color-text-muted);
+}

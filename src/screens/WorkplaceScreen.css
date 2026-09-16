@@ -24,9 +24,9 @@
 }
 
 .workplace-screen__tab--active {
-  background: var(--color-primary);
+  background: var(--color-primary-soft);
   border-color: var(--color-primary);
-  color: #fff;
+  color: var(--color-primary-hover);
   font-weight: 700;
 }
 

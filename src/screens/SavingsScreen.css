@@ -1,0 +1,40 @@
+.savings-screen__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.savings-screen__add-button {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-button);
+}
+
+.savings-screen__add-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.savings-screen__empty {
+  background: var(--color-surface);
+  border: 2px dashed var(--color-border);
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.savings-screen__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}

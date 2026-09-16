@@ -1,12 +1,19 @@
 // 給与形態（時給・日給・月給）
 export type WageType = 'hourly' | 'daily' | 'monthly'
 
+// 深夜割増の計算方式
+// fixed: 深夜帯の時給に固定額（円）を追加する
+// multiplier: 深夜帯の時給（休日加給の対象日ならそれを含めた時給）に倍率をかける
+export type NightShiftMode = 'fixed' | 'multiplier'
+
 // 深夜割増の設定（時給制のときだけ使う）
 export interface NightShiftPremium {
   enabled: boolean
   startTime: string // 深夜帯の開始時刻（例: "22:00"）
   endTime: string // 深夜帯の終了時刻（例: "05:00"）
-  extraWage: number // 深夜帯に追加される時給（円）。例: 200 → 通常の時給+200円
+  mode?: NightShiftMode // 未設定（古いデータ）は fixed として扱う
+  extraWage?: number // mode: 'fixed' のとき使う。深夜帯に追加される時給（円）。例: 200 → 通常の時給+200円
+  multiplier?: number // mode: 'multiplier' のとき使う。例: 1.25 → 時給の1.25倍
 }
 
 // 休憩時間の自動控除（労働基準法の基準をデフォルトにする）
@@ -27,7 +34,7 @@ export interface HolidayPremium {
   enabled: boolean
   targetDays: HolidayTargetDay[] // 加給の対象にする曜日・祝日区分
   customDates: string[] // 店舗が個別に指定する加給日（"YYYY-MM-DD"）
-  extraWage: number // 対象日に追加される時給（円）。例: 200 → 通常の時給+200円
+  extraWage?: number // 対象日に追加される時給（円）。例: 200 → 通常の時給+200円
 }
 
 // 職場の状態（退職済みは「履歴」タブに表示する）

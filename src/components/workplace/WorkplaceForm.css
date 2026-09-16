@@ -9,6 +9,7 @@
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--color-border);
+  border-top-color: var(--glass-edge-top);
   border-radius: 20px;
   padding: 16px;
   display: flex;
@@ -86,9 +87,9 @@
 }
 
 .workplace-form__wage-type-btn--active {
-  background: var(--color-primary);
+  background: var(--color-primary-soft);
   border-color: var(--color-primary);
-  color: #fff;
+  color: var(--color-primary-hover);
   font-weight: 700;
 }
 
@@ -110,9 +111,9 @@
 }
 
 .workplace-form__day-toggle--active {
-  background: var(--color-secondary);
+  background: var(--color-secondary-soft);
   border-color: var(--color-secondary);
-  color: #fff;
+  color: var(--color-secondary);
   font-weight: 700;
 }
 
@@ -152,6 +153,11 @@
   cursor: pointer;
   font-size: 14px;
   line-height: 1;
+}
+
+.workplace-form__hint {
+  font-size: 11px;
+  color: var(--color-text-muted);
 }
 
 .workplace-form__night-shift {

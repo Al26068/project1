@@ -1,4 +1,4 @@
-import { computeWorkedMinutes, parseTimeToMinutes } from './hoursSummary'
+import { computeWorkedMinutes, getMonthKey, parseTimeToMinutes } from './hoursSummary'
 import { isDayBeforeHoliday, isNationalHoliday } from './japaneseHolidays'
 import type { ClockRecord } from '../types/clockRecord'
 import type { HolidayPremium, NightShiftPremium, Workplace } from '../types/workplace'
@@ -93,6 +93,37 @@ function isPremiumHolidayDate(dateKey: string, holidayPremium: HolidayPremium): 
   })
 }
 
+interface PremiumAddOns {
+  nightPremiumWage: number
+  holidayPremiumWage: number
+}
+
+// 深夜割増・休日加給の1レコード分の上乗せ額を計算する。
+// 深夜割増が「倍率」方式のときは、休日加給を先に確定させてから、それを含めた時給に倍率をかける
+// （休日加給を含めた時給 × 倍率 という順序。固定額方式は休日加給と無関係に単純加算する）
+function computePremiumAddOns(record: ClockRecord, workplace: Workplace, paidMinutes: number): PremiumAddOns {
+  const isHolidayDay =
+    !!workplace.holidayPremium?.enabled && isPremiumHolidayDate(record.date, workplace.holidayPremium)
+  const holidayExtraWage = workplace.holidayPremium?.extraWage ?? 0
+  const holidayPremiumWage = isHolidayDay ? (paidMinutes / 60) * holidayExtraWage : 0
+
+  let nightPremiumWage = 0
+  if (workplace.nightShiftPremium?.enabled) {
+    const nightMinutes = computeNightMinutes(record, workplace.nightShiftPremium)
+    const mode = workplace.nightShiftPremium.mode ?? 'fixed'
+
+    if (mode === 'multiplier') {
+      const baseRate = (workplace.hourlyWage ?? 0) + (isHolidayDay ? holidayExtraWage : 0)
+      const multiplier = workplace.nightShiftPremium.multiplier ?? 1
+      nightPremiumWage = (nightMinutes / 60) * baseRate * (multiplier - 1)
+    } else {
+      nightPremiumWage = (nightMinutes / 60) * (workplace.nightShiftPremium.extraWage ?? 0)
+    }
+  }
+
+  return { nightPremiumWage, holidayPremiumWage }
+}
+
 export interface WageBreakdown {
   period: PayPeriod
   totalMinutes: number
@@ -139,17 +170,9 @@ export function calculatePeriodWage(
     const paidMinutes = Math.floor(netMinutes / roundingMinutes) * roundingMinutes
     baseWage += (paidMinutes / 60) * (workplace.hourlyWage ?? 0)
 
-    if (workplace.nightShiftPremium?.enabled) {
-      const nightMinutes = computeNightMinutes(record, workplace.nightShiftPremium)
-      nightPremiumWage += (nightMinutes / 60) * workplace.nightShiftPremium.extraWage
-    }
-
-    if (
-      workplace.holidayPremium?.enabled &&
-      isPremiumHolidayDate(record.date, workplace.holidayPremium)
-    ) {
-      holidayPremiumWage += (paidMinutes / 60) * workplace.holidayPremium.extraWage
-    }
+    const addOns = computePremiumAddOns(record, workplace, paidMinutes)
+    nightPremiumWage += addOns.nightPremiumWage
+    holidayPremiumWage += addOns.holidayPremiumWage
   }
 
   const totalWage = Math.round(baseWage + nightPremiumWage + holidayPremiumWage)
@@ -162,4 +185,45 @@ export function calculatePeriodWage(
     holidayPremiumWage: Math.round(holidayPremiumWage),
     totalWage,
   }
+}
+
+// これまでの全打刻記録から、稼いだ給料の合計を計算する（貯金目標の達成率に使う）
+// 月給制の職場は、打刻記録がある月ぶんの月給を1回ずつ加算する（打刻のない月は含めない）
+export function calculateTotalEarnings(workplaces: Workplace[], allRecords: ClockRecord[]): number {
+  const workplaceMap = new Map(workplaces.map((w) => [w.id, w]))
+  let total = 0
+
+  const monthlyEarnedMonths = new Map<string, Set<string>>()
+
+  for (const record of allRecords) {
+    const workplace = workplaceMap.get(record.workplaceId)
+    if (!workplace) continue
+
+    if (workplace.wageType === 'monthly') {
+      const months = monthlyEarnedMonths.get(workplace.id) ?? new Set<string>()
+      months.add(getMonthKey(record.date))
+      monthlyEarnedMonths.set(workplace.id, months)
+      continue
+    }
+
+    const netMinutes = computeWorkedMinutes(record, workplace)
+
+    if (workplace.wageType === 'daily') {
+      total += workplace.dailyWage ?? 0
+      continue
+    }
+
+    const roundingMinutes = workplace.roundingMinutes && workplace.roundingMinutes > 0 ? workplace.roundingMinutes : 1
+    const paidMinutes = Math.floor(netMinutes / roundingMinutes) * roundingMinutes
+    total += (paidMinutes / 60) * (workplace.hourlyWage ?? 0)
+
+    const addOns = computePremiumAddOns(record, workplace, paidMinutes)
+    total += addOns.nightPremiumWage + addOns.holidayPremiumWage
+  }
+
+  for (const [workplaceId, months] of monthlyEarnedMonths) {
+    total += (workplaceMap.get(workplaceId)?.monthlyWage ?? 0) * months.size
+  }
+
+  return Math.round(total)
 }

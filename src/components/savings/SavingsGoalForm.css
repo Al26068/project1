@@ -1,0 +1,71 @@
+.savings-goal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.savings-goal-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--color-text);
+}
+
+.savings-goal-form__field input {
+  font: inherit;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-strong);
+  color: var(--color-text-strong);
+}
+
+.savings-goal-form__field input:focus {
+  outline: 2px solid var(--color-primary-soft);
+  border-color: var(--color-primary);
+}
+
+.savings-goal-form__color-list {
+  display: flex;
+  gap: 10px;
+}
+
+.savings-goal-form__color-swatch {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.savings-goal-form__color-swatch--active {
+  border-color: var(--color-text-strong);
+}
+
+.savings-goal-form__actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.savings-goal-form__btn {
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: none;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.savings-goal-form__btn--primary {
+  background: var(--color-primary);
+  color: #fff;
+  box-shadow: var(--shadow-button);
+}
+
+.savings-goal-form__btn--ghost {
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}

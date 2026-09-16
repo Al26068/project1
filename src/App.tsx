@@ -6,6 +6,7 @@ import ClockInScreen from './screens/ClockInScreen'
 import ShiftScreen from './screens/ShiftScreen'
 import HoursGraphScreen from './screens/HoursGraphScreen'
 import SavingsScreen from './screens/SavingsScreen'
+import SavingsGoalDetailScreen from './screens/SavingsGoalDetailScreen'
 import SettingsScreen from './screens/SettingsScreen'
 import NotificationScreen from './screens/NotificationScreen'
 import AccountScreen from './screens/AccountScreen'
@@ -21,6 +22,7 @@ function App() {
         <Route path="/shift" element={<ShiftScreen />} />
         <Route path="/hours" element={<HoursGraphScreen />} />
         <Route path="/savings" element={<SavingsScreen />} />
+        <Route path="/savings/:id" element={<SavingsGoalDetailScreen />} />
         <Route path="/settings" element={<SettingsScreen />} />
         <Route path="/notifications" element={<NotificationScreen />} />
         <Route path="/account" element={<AccountScreen />} />
