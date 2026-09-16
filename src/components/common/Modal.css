@@ -1,7 +1,8 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(61, 46, 58, 0.4);
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -14,9 +15,12 @@
   max-width: 440px;
   max-height: 80svh;
   overflow-y: auto;
-  background: var(--color-bg);
-  border-radius: 20px;
-  padding: 16px;
+  background: rgba(15, 20, 32, 0.85);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--color-border-light);
+  border-radius: 22px;
+  padding: 20px;
   box-shadow: var(--shadow-soft);
 }
 
@@ -32,9 +36,9 @@
 }
 
 .modal-content__close {
-  border: none;
+  border: 1px solid var(--color-border);
   background: var(--color-surface);
-  color: var(--color-text);
+  color: var(--color-text-strong);
   width: 32px;
   height: 32px;
   border-radius: 50%;

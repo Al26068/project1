@@ -6,5 +6,5 @@
 
 .app-content {
   flex: 1;
-  padding: 16px 16px 96px;
+  padding: 16px 16px calc(112px + env(safe-area-inset-bottom));
 }

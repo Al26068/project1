@@ -1,13 +1,17 @@
 .screen-placeholder {
   background: var(--color-surface);
-  border: 2px dashed var(--color-border);
-  border-radius: 16px;
-  padding: 24px;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  padding: 28px 24px;
   text-align: center;
   color: var(--color-text);
+  box-shadow: var(--shadow-soft);
 }
 
 .screen-placeholder p {
   margin-top: 8px;
   font-size: 14px;
+  color: var(--color-text-muted);
 }

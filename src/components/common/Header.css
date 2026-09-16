@@ -5,16 +5,19 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: var(--color-primary-soft);
+  background: rgba(10, 15, 25, 0.65);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   padding: 12px 12px 12px 16px;
-  border-bottom: 2px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .app-header__title {
   flex: 1;
   text-align: center;
   font-size: 18px;
-  font-weight: 700;
+  font-weight: 600;
+  letter-spacing: -0.02em;
   color: var(--color-text-strong);
 }
 
@@ -30,6 +33,11 @@
   color: var(--color-text-strong);
   text-decoration: none;
   cursor: pointer;
+  transition: background 180ms ease;
+}
+
+.app-header__icon-button:hover {
+  background: var(--color-surface);
 }
 
 .app-header__icon {
@@ -51,9 +59,11 @@
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
-  background: var(--color-bg);
-  border: 1px solid var(--color-border);
-  border-radius: 14px;
+  background: rgba(15, 20, 32, 0.85);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--color-border-light);
+  border-radius: 16px;
   box-shadow: var(--shadow-soft);
   padding: 6px;
   display: flex;
@@ -68,6 +78,7 @@
   color: var(--color-text-strong);
   text-decoration: none;
   font-size: 14px;
+  transition: background 150ms ease;
 }
 
 .app-header__menu-item:hover {

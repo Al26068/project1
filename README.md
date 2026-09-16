@@ -1,32 +1,50 @@
-# React + TypeScript + Vite
+# その場で給料
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+バイトの予定・勤務時間をその場で記録し、給与を自動計算するアプリ。複数のバイト先を掛け持ちしている人が、シフトの記録・給与確認・貯金管理をするときに使う想定。
 
-Currently, two official plugins are available:
+このプロジェクトのルール・仕様の正本は [CLAUDE.md](./CLAUDE.md)。開発の経緯・現在の進捗は [HANDOFF.md](./HANDOFF.md)（現在のスナップショット）と [LOG.md](./LOG.md)（時系列の変更ログ）を参照。
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 技術構成
 
-## React Compiler
+- React + TypeScript + Vite
+- react-router-dom（画面遷移）
+- 通常のCSS（Tailwind等は不使用）
+- 状態管理は useState / useContext のみ
+- データ保存は localStorage のみ（外部DB・認証なし）
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## セットアップ（別PCで作業を始めるとき）
 
-## Expanding the Oxlint configuration
+1. Node.js のバージョンを合わせる（`.nvmrc` に記載のバージョンを使用）
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+   ```bash
+   nvm install
+   nvm use
+   ```
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+   **注意（WSL環境の場合）**：Windows側のnode.exeがWSL内のプロジェクトを実行すると、パス解決に失敗して開発サーバーが起動直後にクラッシュすることがある。必ず `nvm` でインストールしたLinuxネイティブのNode.jsを使うこと（`which node` が `/mnt/c/...` ではなく `/home/.../.nvm/...` を指しているか確認）。
+
+2. 依存パッケージをインストール
+
+   ```bash
+   npm install
+   ```
+
+3. 開発サーバーを起動
+
+   ```bash
+   npm run dev
+   ```
+
+   `http://localhost:5173` で開く。ポートは `vite.config.ts` で `5173` に固定している（`strictPort: true`）。**別のプロセスが5173を使っていて起動に失敗した場合は、そのプロセスを終了させてから再実行すること。** ポート番号がずれると、localStorageに保存したデータ（職場情報・勤務記録など）が別オリジン扱いになり、前のPCで入力したデータが「消えたように」見えてしまうため。
+
+## データについて
+
+すべてのデータ（職場情報・勤務記録・カレンダーの予定など）は各ブラウザの localStorage に保存されており、サーバー側には何も送信されない。そのため、**PCを変えたりブラウザを変えたりすると、入力したデータは引き継がれない**（コードはGitHubで同期されるが、データはされない）。
+
+## その他のコマンド
+
+```bash
+npm run build    # 型チェック + 本番ビルド
+npm run lint     # oxlint によるlint
+npm run preview  # ビルド結果のプレビュー
 ```
-
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.

@@ -1,8 +1,11 @@
 .bar-chart {
   background: var(--color-surface);
-  border-radius: 16px;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: 20px;
   padding: 20px 12px 12px;
   border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-soft);
 }
 
 .bar-chart__bars {

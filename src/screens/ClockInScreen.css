@@ -18,10 +18,10 @@
   height: 160px;
   border-radius: 50%;
   border: none;
-  background: linear-gradient(135deg, var(--color-secondary), var(--color-primary));
+  background: var(--color-primary);
   color: #fff;
   font-size: 18px;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: var(--shadow-soft);
+  box-shadow: var(--shadow-button);
 }

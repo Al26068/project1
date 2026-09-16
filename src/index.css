@@ -1,26 +1,36 @@
 :root {
-  --color-bg: #fff8fb;
-  --color-surface: #ffffff;
-  --color-text: #5b4a55;
-  --color-text-strong: #3d2e3a;
-  --color-primary: #ff9eb5;
-  --color-primary-soft: #ffe1e9;
-  --color-secondary: #c9a7eb;
-  --color-secondary-soft: #ecdcff;
-  --color-accent-yellow: #ffe29a;
-  --color-accent-green: #b6e8c8;
-  --color-accent-blue: #aad4f5;
-  --color-accent-red: #ffb3ba;
-  --color-sunday: #e0607a;
-  --color-saturday: #5b8fd6;
-  --color-border: #f3d9e4;
-  --shadow-soft: 0 4px 12px rgba(255, 158, 181, 0.25);
+  --color-bg: #05070c;
+  --color-surface: rgba(255, 255, 255, 0.055);
+  --color-surface-strong: rgba(255, 255, 255, 0.075);
+  --color-text: rgba(255, 255, 255, 0.62);
+  --color-text-strong: rgba(255, 255, 255, 0.95);
+  --color-text-muted: rgba(255, 255, 255, 0.4);
 
-  --font-sans: 'Hiragino Maru Gothic ProN', 'Rounded Mplus 1c', system-ui,
-    'Segoe UI', Roboto, sans-serif;
+  --color-primary: #0a84ff;
+  --color-primary-hover: #3396ff;
+  --color-primary-soft: rgba(10, 132, 255, 0.14);
+  --color-secondary: #8175ff;
+  --color-secondary-soft: rgba(129, 117, 255, 0.12);
+
+  --color-accent-yellow: #e8c76b;
+  --color-accent-green: #63d6b0;
+  --color-accent-blue: #64d8ff;
+  --color-accent-red: #ff8a8a;
+  --color-sunday: #ff7a90;
+  --color-saturday: #64b8ff;
+
+  --color-border: rgba(255, 255, 255, 0.09);
+  --color-border-light: rgba(255, 255, 255, 0.13);
+  --shadow-soft: 0 20px 50px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.035);
+  --shadow-button: 0 1px 1px rgba(0, 0, 0, 0.2), 0 6px 16px rgba(0, 0, 0, 0.3);
+  --shadow-glow: 0 6px 18px rgba(10, 132, 255, 0.22);
+  --glass-blur: blur(20px) saturate(120%);
+
+  --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text',
+    'Hiragino Maru Gothic ProN', 'Segoe UI', 'Noto Sans JP', sans-serif;
 
   font: 16px/150% var(--font-sans);
-  color-scheme: light;
+  color-scheme: dark;
   color: var(--color-text);
   background: var(--color-bg);
   -webkit-font-smoothing: antialiased;
@@ -41,7 +51,10 @@ body {
   max-width: 480px;
   margin: 0 auto;
   min-height: 100svh;
-  background: var(--color-bg);
+  background:
+    radial-gradient(circle at 75% 8%, rgba(10, 132, 255, 0.1), transparent 35%),
+    radial-gradient(circle at 15% 85%, rgba(120, 70, 255, 0.07), transparent 32%),
+    var(--color-bg);
   display: flex;
   flex-direction: column;
   box-shadow: var(--shadow-soft);
@@ -51,11 +64,25 @@ h1,
 h2,
 h3 {
   font-family: var(--font-sans);
-  font-weight: 700;
+  font-weight: 600;
+  letter-spacing: -0.02em;
   color: var(--color-text-strong);
   margin: 0 0 8px;
 }
 
 p {
   margin: 0;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
 }

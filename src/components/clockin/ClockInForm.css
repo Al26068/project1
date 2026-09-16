@@ -18,7 +18,7 @@
   padding: 10px 12px;
   border-radius: 10px;
   border: 1px solid var(--color-border);
-  background: #fff;
+  background: var(--color-surface-strong);
   color: var(--color-text-strong);
 }
 
@@ -46,7 +46,7 @@
 .clock-in-form__btn--primary {
   background: var(--color-primary);
   color: #fff;
-  box-shadow: var(--shadow-soft);
+  box-shadow: var(--shadow-button);
 }
 
 .clock-in-form__btn:disabled {
